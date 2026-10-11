@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#20202a"/><stop offset="1" stop-color="#111318"/></linearGradient><radialGradient id="glow"><stop stop-color="#8e78f4" stop-opacity=".3"/><stop offset="1" stop-color="#8e78f4" stop-opacity="0"/></radialGradient></defs>
+  <rect width="800" height="500" fill="url(#bg)"/><circle cx="405" cy="230" r="250" fill="url(#glow)"/>
+  <path d="M80 90h640M80 410h640M145 90v320m510-320v320" stroke="#ffffff" stroke-opacity=".08"/><path d="M125 356h550" stroke="#a696ff" stroke-opacity=".45" stroke-width="3"/>
+  <circle cx="400" cy="192" r="28" fill="#f2c49b"/>
+  <path d="m400 228v105m0-83-80-76-24-77m104 153 80-76 24-77m-104 236-61 83m61-83 61 83" fill="none" stroke="#f3eee6" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M262 93h276" stroke="#a696ff" stroke-width="9" stroke-linecap="round"/><path d="M255 76v34m-16-29v24m306-29v34m16-29v24" stroke="#a696ff" stroke-width="9" stroke-linecap="round"/>
+  <text x="56" y="462" fill="#a696ff" font-family="Arial,sans-serif" font-size="19" letter-spacing="4">FORM / PRESS</text><text x="665" y="462" fill="#fff" fill-opacity=".45" font-family="Arial,sans-serif" font-size="15">03</text>
+</svg>
