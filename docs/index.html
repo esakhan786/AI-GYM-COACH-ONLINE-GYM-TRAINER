@@ -37,7 +37,7 @@
         <a href="#visuals">Gallery</a>
         <a href="https://www.linkedin.com/in/esa-khan-1b4941385/" target="_blank" rel="noopener noreferrer" style="color: var(--amber); font-weight: 700;">LinkedIn ↗</a>
         <a href="#contact">Contact</a>
-        <a href="?start=true" target="_top" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px;" onclick="handleTryLive(event)">⚡ Try Live</a>
+        <a href="#live-demo-modal" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px; cursor: pointer;" onclick="handleTryLive(event)">⚡ Try Live</a>
       </div>
     </nav>
 
@@ -61,10 +61,10 @@
 
       <div class="hero-cta-row">
         <a
-          href="?start=true"
-          target="_top"
+          href="#live-demo-modal"
           class="btn-primary"
           id="cta-button"
+          style="cursor: pointer;"
           onclick="handleTryLive(event)"
         >
           <span>Try it live</span>
@@ -465,48 +465,16 @@
 
     <script>
       function getStreamlitUrl() {
-        var isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        var host = window.location.hostname;
+        var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '' || window.location.protocol === 'file:');
         if (isLocal) {
           return 'http://localhost:8501/?start=true&embed=true';
-        }
-        if (window.location.hostname.indexOf('streamlit.app') !== -1) {
-          return window.location.origin + '/?start=true&embed=true';
         }
         return 'https://ai-gym-coach-online-gym-trainer-jtumd68f7rbz8pxbp8ybog.streamlit.app/?start=true&embed=true';
       }
 
       function handleTryLive(e) {
         if (e && e.preventDefault) e.preventDefault();
-
-        // 1. If running inside Streamlit iframe:
-        // Navigate top window so the landing page REMOVES completely and the project shows directly on 1st click!
-        var insideIframe = false;
-        try {
-          insideIframe = (window.self !== window.top);
-        } catch (err) {
-          insideIframe = true;
-        }
-
-        if (insideIframe) {
-          try {
-            if (window.top && window.top.location) {
-              window.top.location.search = '?start=true';
-              return;
-            }
-          } catch (err) {}
-          try {
-            if (window.parent && window.parent.location) {
-              window.parent.location.search = '?start=true';
-              return;
-            }
-          } catch (err) {}
-          var targetUrl = getStreamlitUrl().replace('&embed=true', '');
-          window.open(targetUrl, '_top');
-          return;
-        }
-
-        // 2. If running standalone (localhost:8080 or GitHub Pages):
-        // Open the live modal directly loading the real workout project (?start=true) on 1st click!
         openDemoModal(e);
       }
 
@@ -517,17 +485,27 @@
         var newTabBtn = document.getElementById('open-new-tab-btn');
         var url = getStreamlitUrl();
 
-        iframe.src = url;
-        newTabBtn.href = url.replace('&embed=true', '');
-        modal.style.display = 'flex';
+        if (iframe) {
+          iframe.src = url;
+        }
+        if (newTabBtn) {
+          newTabBtn.href = url.replace('&embed=true', '');
+        }
+        if (modal) {
+          modal.style.display = 'flex';
+        }
         document.body.style.overflow = 'hidden';
       }
 
       function closeDemoModal() {
         var modal = document.getElementById('live-demo-modal');
         var iframe = document.getElementById('streamlit-frame');
-        modal.style.display = 'none';
-        iframe.src = '';
+        if (modal) {
+          modal.style.display = 'none';
+        }
+        if (iframe) {
+          iframe.src = '';
+        }
         document.body.style.overflow = 'auto';
       }
 

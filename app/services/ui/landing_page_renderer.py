@@ -31,7 +31,6 @@ def find_landing_dir() -> Path:
     return Path("LandingPage").resolve()
 
 
-@st.cache_data(show_spinner=False)
 def get_compiled_landing_page() -> str:
     landing_dir = find_landing_dir()
     html_file = landing_dir / "index.html"
