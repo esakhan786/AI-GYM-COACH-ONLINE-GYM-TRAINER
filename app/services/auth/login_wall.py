@@ -136,4 +136,12 @@ def render_login_wall():
 
         st.rerun()
 
+    c1, c2, c3 = st.columns([1, 2, 1])
+    with c2:
+        if st.button("← Back to Landing Page", key="back_to_landing_login", use_container_width=True):
+            st.session_state["entered_app"] = False
+            if "start" in st.query_params:
+                del st.query_params["start"]
+            st.rerun()
+
     return False

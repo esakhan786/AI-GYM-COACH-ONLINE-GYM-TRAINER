@@ -16,11 +16,28 @@ from groq import Groq
 from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
+from services.ui.landing_page_renderer import render_landing_page
 
 APP_DIR = Path(__file__).resolve().parent
 
 
 def main():
+    start_param = st.query_params.get("start")
+    if start_param in ("true", "1", "yes"):
+        st.session_state["entered_app"] = True
+
+    entered_app = st.session_state.get("entered_app", False)
+
+    if not entered_app:
+        st.set_page_config(
+            page_icon="🏋️‍♀️",
+            page_title="Real-time AI GYM Trainer",
+            initial_sidebar_state="collapsed",
+            layout="wide"
+        )
+        render_landing_page()
+        return
+
     st.set_page_config(
         page_icon="🏋️‍♀️",
         page_title="AI Real-time GYM Coach",
@@ -32,6 +49,13 @@ def main():
     inject_local_font(str(APP_DIR / "static" / "AdobeClean.otf"), "AdobeClean")
 
     init_db()
+
+    with st.sidebar:
+        if st.button("🏠 Landing Page / Overview", key="back_to_landing_nav"):
+            st.session_state["entered_app"] = False
+            if "start" in st.query_params:
+                del st.query_params["start"]
+            st.rerun()
 
     if not render_login_wall():
         return 
