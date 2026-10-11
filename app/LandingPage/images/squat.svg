@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#252016"/><stop offset="1" stop-color="#111318"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#f5a623" stop-opacity=".28"/><stop offset="1" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/><circle cx="410" cy="245" r="250" fill="url(#glow)"/>
+  <path d="M80 90h640M80 410h640M145 90v320m510-320v320" stroke="#ffffff" stroke-opacity=".08"/>
+  <path d="M125 353h550" stroke="#f5a623" stroke-opacity=".45" stroke-width="3"/>
+  <circle cx="397" cy="124" r="29" fill="#f2c49b"/>
+  <path d="M380 158 350 248l-85 58m85-58 84 60m-84-60 43 86-86 67m86-67 91 56 69-36" fill="none" stroke="#f3eee6" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m336 180 108 35" stroke="#f5a623" stroke-width="13" stroke-linecap="round"/>
+  <path d="m345 349-12 55m159-47 41 47" stroke="#f5a623" stroke-width="12" stroke-linecap="round"/>
+  <path d="M400 89a42 42 0 0 1 42 42" fill="none" stroke="#f5a623" stroke-width="3"/>
+  <text x="56" y="462" fill="#f5a623" font-family="Arial,sans-serif" font-size="19" letter-spacing="4">FORM / SQUAT</text>
+  <text x="665" y="462" fill="#fff" fill-opacity=".45" font-family="Arial,sans-serif" font-size="15">01</text>
+</svg>

@@ -22,6 +22,13 @@ APP_DIR = Path(__file__).resolve().parent
 
 
 def main():
+    st.set_page_config(
+        page_icon="🏋️‍♀️",
+        page_title="Real-time AI GYM Trainer",
+        initial_sidebar_state="collapsed",
+        layout="wide"
+    )
+
     start_param = st.query_params.get("start")
     if start_param in ("true", "1", "yes"):
         st.session_state["entered_app"] = True
@@ -29,21 +36,8 @@ def main():
     entered_app = st.session_state.get("entered_app", False)
 
     if not entered_app:
-        st.set_page_config(
-            page_icon="🏋️‍♀️",
-            page_title="Real-time AI GYM Trainer",
-            initial_sidebar_state="collapsed",
-            layout="wide"
-        )
         render_landing_page()
         return
-
-    st.set_page_config(
-        page_icon="🏋️‍♀️",
-        page_title="AI Real-time GYM Coach",
-        initial_sidebar_state="expanded",
-        layout="centered"
-    )
 
     load_css(str(APP_DIR / "static" / "style.css"))
     inject_local_font(str(APP_DIR / "static" / "AdobeClean.otf"), "AdobeClean")

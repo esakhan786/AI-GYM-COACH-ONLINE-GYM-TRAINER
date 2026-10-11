@@ -7,6 +7,11 @@ import streamlit.components.v1 as components
 
 def find_landing_dir() -> Path:
     current_dir = Path(__file__).resolve().parent
+    # Check directly inside app/LandingPage
+    app_landing = current_dir.parent.parent / "LandingPage"
+    if (app_landing / "index.html").exists():
+        return app_landing
+
     # Search upwards for LandingPage or docs
     check_dir = current_dir
     for _ in range(5):
@@ -18,7 +23,7 @@ def find_landing_dir() -> Path:
 
     # Check cwd
     cwd = Path.cwd()
-    for candidate in ["LandingPage", "docs", "."]:
+    for candidate in ["LandingPage", "app/LandingPage", "docs", "."]:
         p = cwd / candidate
         if (p / "index.html").exists():
             return p
@@ -111,7 +116,6 @@ def get_compiled_landing_page() -> str:
     custom_script = """
     <script>
       function launchLiveApp(e) {
-        if (e && e.preventDefault) e.preventDefault();
         try {
           if (window.top && window.top.location) {
             window.top.location.search = '?start=true';
@@ -124,7 +128,7 @@ def get_compiled_landing_page() -> str:
             return;
           }
         } catch(err) {}
-        window.location.search = '?start=true';
+        // Native <a href="?start=true" target="_top"> will handle top window navigation!
       }
 
       function notifyParentHeight() {
@@ -191,3 +195,4 @@ def render_landing_page():
 
     compiled_html = get_compiled_landing_page()
     components.html(compiled_html, height=3100, scrolling=False)
+
