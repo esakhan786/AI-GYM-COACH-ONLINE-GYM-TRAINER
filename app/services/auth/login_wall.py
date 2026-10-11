@@ -1,8 +1,5 @@
-from pathlib import Path
 import streamlit as st
 from services.persistence.exercise_repository import get_or_create_user
-
-STATIC_IMG = Path(__file__).resolve().parent.parent.parent / "static" / "images"
 
 
 def render_login_wall():
@@ -138,92 +135,5 @@ def render_login_wall():
         st.session_state["username"] = user["username"]
 
         st.rerun()
-
-    st.markdown("<div style='margin-top: 38px;'></div>", unsafe_allow_html=True)
-
-    tab_gallery, tab_arch, tab_exercises = st.tabs([
-        "📸 Live App Showcase & Previews",
-        "🏛️ How It Works & Architecture",
-        "🏋️ 5 Target Exercises",
-    ])
-
-    with tab_gallery:
-        st.markdown("<h4 style='color:#ffffff; margin-bottom:4px; font-weight:700;'>⚡ Real-Time Tracking & AI Coaching in Action</h4>", unsafe_allow_html=True)
-        st.caption("Here is how Apna AI Gym Coach tracks your skeletal landmarks, monitors posture angles, and guides your workout in real-time.")
-
-        c1, c2 = st.columns(2)
-        with c1:
-            st.image(str(STATIC_IMG / "preview-shoulder-press.png"), caption="🏋️ Shoulder Press: Overhead lockout & neutral spine monitoring", use_container_width=True)
-            st.image(str(STATIC_IMG / "preview-biceps-curl.png"), caption="💪 Biceps Curl: Elbow hinge isolation & anti-swing detection", use_container_width=True)
-        with c2:
-            st.image(str(STATIC_IMG / "preview-dashboard.png"), caption="📋 Routine Planner: Custom sets, rep volume & camera device", use_container_width=True)
-            st.image(str(STATIC_IMG / "preview-workout.png"), caption="🎙️ Voice Coaching & Workout Completion Summary", use_container_width=True)
-
-        st.image(str(STATIC_IMG / "preview-login.png"), caption="👤 Athlete Portal & Profile Management", use_container_width=True)
-
-    with tab_arch:
-        st.markdown("<h4 style='color:#ffffff; margin-bottom:4px; font-weight:700;'>🏛️ Complete System Architecture</h4>", unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 14px;">
-                <div style="background: rgba(18, 22, 34, 0.95); border: 1px solid rgba(245, 166, 35, 0.25); border-radius: 8px; padding: 16px;">
-                    <div style="color: #f5a623; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 6px;">01 / COMPUTER VISION</div>
-                    <div style="color: #ffffff; font-size: 15px; font-weight: 700; margin-bottom: 8px;">👁️ MediaPipe Vision Engine</div>
-                    <p style="color: #9ab0cb; font-size: 12.5px; line-height: 1.5; margin: 0;">
-                        Ingests real-time video frames via <strong>Streamlit WebRTC</strong> at 30+ FPS. 
-                        Tracks 33 3D skeletal landmarks with zero wearable sensors.
-                    </p>
-                </div>
-                <div style="background: rgba(18, 22, 34, 0.95); border: 1px solid rgba(245, 166, 35, 0.25); border-radius: 8px; padding: 16px;">
-                    <div style="color: #f5a623; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 6px;">02 / BIOMECHANICS</div>
-                    <div style="color: #ffffff; font-size: 15px; font-weight: 700; margin-bottom: 8px;">📐 Kinematic Form Detectors</div>
-                    <p style="color: #9ab0cb; font-size: 12.5px; line-height: 1.5; margin: 0;">
-                        Calculates joint angles in real time. Finite state machines count reps and detect form breakdowns (knee collapse, back arching, elbow drift).
-                    </p>
-                </div>
-                <div style="background: rgba(18, 22, 34, 0.95); border: 1px solid rgba(245, 166, 35, 0.25); border-radius: 8px; padding: 16px;">
-                    <div style="color: #f5a623; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 6px;">03 / REAL-TIME AI</div>
-                    <div style="color: #ffffff; font-size: 15px; font-weight: 700; margin-bottom: 8px;">🎙️ Groq LLM Voice Coach</div>
-                    <p style="color: #9ab0cb; font-size: 12.5px; line-height: 1.5; margin: 0;">
-                        Ultra-fast sub-second LLM inference via <strong>Groq Cloud</strong>. 
-                        Delivers spoken motivational cues and instant form corrections via <strong>Edge TTS</strong>.
-                    </p>
-                </div>
-                <div style="background: rgba(18, 22, 34, 0.95); border: 1px solid rgba(245, 166, 35, 0.25); border-radius: 8px; padding: 16px;">
-                    <div style="color: #f5a623; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 6px;">04 / PERSISTENCE</div>
-                    <div style="color: #ffffff; font-size: 15px; font-weight: 700; margin-bottom: 8px;">📊 Session Analytics & SQLite</div>
-                    <p style="color: #9ab0cb; font-size: 12.5px; line-height: 1.5; margin: 0;">
-                        Stores athlete profiles, timestamped sets, completed reps, and duration for progressive overload tracking.
-                    </p>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with tab_exercises:
-        st.markdown("<h4 style='color:#ffffff; margin-bottom:4px; font-weight:700;'>🏋️ 5 Target Biomechanical Exercises</h4>", unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">
-                <div style="background: rgba(18, 22, 34, 0.85); border-left: 3px solid #f5a623; padding: 12px 16px; border-radius: 4px;">
-                    <strong style="color: #ffffff;">🦵 Squats:</strong> <span style="color: #9ab0cb;">Tracks hip-knee flexion depth, neutral spine angle, and full lockout extension.</span>
-                </div>
-                <div style="background: rgba(18, 22, 34, 0.85); border-left: 3px solid #00d4ff; padding: 12px 16px; border-radius: 4px;">
-                    <strong style="color: #ffffff;">💪 Push-ups:</strong> <span style="color: #9ab0cb;">Checks straight-line torso rigid plank, 90° elbow flexion, and full lockout.</span>
-                </div>
-                <div style="background: rgba(18, 22, 34, 0.85); border-left: 3px solid #f5a623; padding: 12px 16px; border-radius: 4px;">
-                    <strong style="color: #ffffff;">🏋️ Biceps Curls:</strong> <span style="color: #9ab0cb;">Measures elbow flexion/extension and detects torso swinging or momentum cheating.</span>
-                </div>
-                <div style="background: rgba(18, 22, 34, 0.85); border-left: 3px solid #00d4ff; padding: 12px 16px; border-radius: 4px;">
-                    <strong style="color: #ffffff;">⚡ Shoulder Press:</strong> <span style="color: #9ab0cb;">Detects full vertical arm extension overhead while preventing lower-back hyperextension.</span>
-                </div>
-                <div style="background: rgba(18, 22, 34, 0.85); border-left: 3px solid #f5a623; padding: 12px 16px; border-radius: 4px;">
-                    <strong style="color: #ffffff;">🏃 Lunges:</strong> <span style="color: #9ab0cb;">Evaluates 90° knee angle, rear knee drop, and upright balance posture.</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
     return False

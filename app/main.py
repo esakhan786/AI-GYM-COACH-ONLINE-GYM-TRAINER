@@ -16,7 +16,6 @@ from groq import Groq
 from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
-from services.ui.landing_page_renderer import render_landing_page
 
 APP_DIR = Path(__file__).resolve().parent
 
@@ -25,35 +24,14 @@ def main():
     st.set_page_config(
         page_icon="🏋️‍♀️",
         page_title="AI Real-time GYM Coach",
-        initial_sidebar_state="collapsed",
-        layout="wide"
+        initial_sidebar_state="expanded",
+        layout="centered"
     )
 
     load_css(str(APP_DIR / "static" / "style.css"))
     inject_local_font(str(APP_DIR / "static" / "AdobeClean.otf"), "AdobeClean")
 
     init_db()
-
-    # Determine if user is in live demo mode
-    start_param = st.query_params.get("start", "")
-    is_live_mode = (
-        start_param in ("true", "1")
-        or st.session_state.get("entered_app", False)
-        or st.session_state.get("user_id") is not None
-    )
-
-    if not is_live_mode:
-        render_landing_page()
-        return
-
-    # In live demo mode, provide option to return to landing page
-    with st.sidebar:
-        if st.button("🏠 Back to Landing Page", use_container_width=True):
-            st.query_params.clear()
-            st.session_state["entered_app"] = False
-            st.session_state["user_id"] = None
-            st.session_state["username"] = None
-            st.rerun()
 
     if not render_login_wall():
         return 
