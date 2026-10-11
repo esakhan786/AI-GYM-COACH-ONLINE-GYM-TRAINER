@@ -64,6 +64,7 @@
           rel="noopener noreferrer"
           class="btn-primary"
           id="cta-button"
+          onclick="openDemoModal(event)"
         >
           <span>Try it live</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -428,5 +429,60 @@
         <span>© 2026 AI GYM Trainer — Real-time AI Gym Trainer</span>
       </footer>
     </section>
+
+    <!-- LIVE DEMO EMBEDDED MODAL -->
+    <div id="live-demo-modal" class="demo-modal" style="display: none;">
+      <div class="demo-modal-backdrop" onclick="closeDemoModal()"></div>
+      <div class="demo-modal-content">
+        <div class="demo-modal-header">
+          <div class="demo-header-title">
+            <span class="live-dot"></span>
+            <span>APNA AI GYM COACH · LIVE INTERACTIVE ARENA</span>
+          </div>
+          <div class="demo-header-actions">
+            <a id="open-new-tab-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn-modal-action">⛶ Open New Tab</a>
+            <button onclick="closeDemoModal()" class="btn-modal-close" aria-label="Close modal">✕</button>
+          </div>
+        </div>
+        <div class="demo-modal-body">
+          <iframe id="streamlit-frame" src="" allow="camera *; microphone *; display-capture *" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function getStreamlitUrl() {
+        var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        return isLocal
+          ? 'http://localhost:8501/?embed=true'
+          : 'https://ai-gym-coach-online-gym-trainer-jtumd68f7rbz8pxbp8ybog.streamlit.app/?embed=true';
+      }
+
+      function openDemoModal(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var modal = document.getElementById('live-demo-modal');
+        var iframe = document.getElementById('streamlit-frame');
+        var newTabBtn = document.getElementById('open-new-tab-btn');
+        var url = getStreamlitUrl();
+
+        if (!iframe.src || iframe.src.indexOf('embed=true') === -1) {
+          iframe.src = url;
+        }
+        newTabBtn.href = url.replace('?embed=true', '');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDemoModal() {
+        var modal = document.getElementById('live-demo-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDemoModal();
+      });
+    </script>
   </body>
 </html>
+
