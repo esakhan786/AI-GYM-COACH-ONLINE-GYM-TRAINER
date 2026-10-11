@@ -95,41 +95,9 @@ def get_compiled_landing_page() -> str:
 
     html = re.sub(r'src=["\']([^"\']+\.(?:png|jpg|jpeg|svg))["\']', replace_image_source, html)
 
-    # Configure CTA Button to trigger Streamlit app entry
-    cta_replacement = (
-        '<a href="?start=true" target="_top" class="btn-primary" id="cta-button" onclick="launchLiveApp(event)">'
-        '<span>Try it live</span>'
-        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none">'
-        '<path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
-        '</svg>'
-        '</a>'
-    )
-
-    html = re.sub(
-        r'<a\s+[^>]*id=["\']cta-button["\'][^>]*>.*?</a>',
-        cta_replacement,
-        html,
-        flags=re.DOTALL,
-    )
-
-    # Script for seamless top navigation & dynamic height reporting
+    # Preserve working openDemoModal modal popup
     custom_script = """
     <script>
-      function launchLiveApp(e) {
-        try {
-          if (window.top && window.top.location) {
-            window.top.location.search = '?start=true';
-            return;
-          }
-        } catch(err) {}
-        try {
-          if (window.parent && window.parent.location) {
-            window.parent.location.search = '?start=true';
-            return;
-          }
-        } catch(err) {}
-        // Native <a href="?start=true" target="_top"> will handle top window navigation!
-      }
 
       function notifyParentHeight() {
         try {

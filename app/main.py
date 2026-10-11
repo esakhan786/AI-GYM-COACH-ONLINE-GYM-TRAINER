@@ -30,7 +30,8 @@ def main():
     )
 
     start_param = st.query_params.get("start")
-    if start_param in ("true", "1", "yes"):
+    embed_param = st.query_params.get("embed")
+    if start_param in ("true", "1", "yes") or embed_param in ("true", "1", "yes"):
         st.session_state["entered_app"] = True
 
     entered_app = st.session_state.get("entered_app", False)
