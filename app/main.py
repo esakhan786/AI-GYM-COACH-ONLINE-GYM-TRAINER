@@ -50,6 +50,8 @@ def main():
             st.session_state["entered_app"] = False
             if "start" in st.query_params:
                 del st.query_params["start"]
+            if "embed" in st.query_params:
+                del st.query_params["embed"]
             st.rerun()
 
     if not render_login_wall():
