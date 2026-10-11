@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#172524"/><stop offset="1" stop-color="#111318"/></linearGradient><radialGradient id="glow"><stop stop-color="#50c9a4" stop-opacity=".28"/><stop offset="1" stop-color="#50c9a4" stop-opacity="0"/></radialGradient></defs>
+  <rect width="800" height="500" fill="url(#bg)"/><circle cx="420" cy="260" r="245" fill="url(#glow)"/>
+  <path d="M80 90h640M80 410h640M145 90v320m510-320v320" stroke="#ffffff" stroke-opacity=".08"/><path d="M125 368h550" stroke="#50c9a4" stroke-opacity=".5" stroke-width="3"/>
+  <circle cx="273" cy="217" r="27" fill="#f2c49b"/>
+  <path d="m302 231 108 26 112-6m-112 6 94 60 112 42m-206-108-78 62-20 55m78-62-57 5-44-60" fill="none" stroke="#f3eee6" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m504 251 19 60m90 50v29m-313-7v-28" stroke="#50c9a4" stroke-width="12" stroke-linecap="round"/>
+  <path d="m298 182 104 25 111-7" fill="none" stroke="#50c9a4" stroke-opacity=".6" stroke-width="3" stroke-dasharray="8 9"/>
+  <text x="56" y="462" fill="#50c9a4" font-family="Arial,sans-serif" font-size="19" letter-spacing="4">FORM / PUSH-UP</text><text x="665" y="462" fill="#fff" fill-opacity=".45" font-family="Arial,sans-serif" font-size="15">04</text>
+</svg>

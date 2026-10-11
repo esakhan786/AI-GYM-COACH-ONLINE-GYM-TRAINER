@@ -1,3 +1,4 @@
+
 import time
 import streamlit as st
 
@@ -68,7 +69,13 @@ class VoicePipeline:
 
         now = time.time()
 
-        is_major_issue = event in ["workout_started", "set_completed", "workout_completed"]
+        is_major_issue = event in [
+            "workout_started",
+            "set_completed",
+            "workout_completed",
+            "workout_ended_early",
+            "workout_incomplete",
+        ]
 
         if not is_major_issue:
             if not issue:
@@ -77,8 +84,18 @@ class VoicePipeline:
             if now - self.last_spoken_at < 5:
                 return None
             
-        text = self.llm.give_feedback(event, issue)
-        voice = self.tts.speak(text)
+        try:
+            text = self.llm.give_feedback(event, issue) if self.llm else None
+        except Exception:
+            text = f"Check your form: {issue}" if issue else None
+
+        if not text:
+            return None
+
+        try:
+            voice = self.tts.speak(text) if self.tts else None
+        except Exception:
+            voice = None
 
         self.last_spoken_at = now
 

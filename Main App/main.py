@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import time
 import pandas as pd
+from pathlib import Path
 from services.auth.login_wall import render_login_wall
 from services.state.session_defaults import initial_session_defaults
 from services.config.workout_config import EXERCISE_OPTIONS
@@ -16,7 +17,9 @@ from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
 
-  
+APP_DIR = Path(__file__).resolve().parent
+
+
 def main():
     st.set_page_config(
         page_icon="🏋️‍♀️",
@@ -25,8 +28,8 @@ def main():
         layout="centered"
     )
 
-    load_css(os.path.join(os.getcwd(), "static", "style.css"))
-    inject_local_font(os.path.join(os.getcwd(), "static", "AdobeClean.otf"), "AdobeClean")
+    load_css(str(APP_DIR / "static" / "style.css"))
+    inject_local_font(str(APP_DIR / "static" / "AdobeClean.otf"), "AdobeClean")
 
     init_db()
 
@@ -35,19 +38,24 @@ def main():
 
     initial_session_defaults()
 
-    if "voice_pipeline" not in st.session_state:
-        try:
-            api_key = os.environ.get("GROQ_API_KEY", "")
+    env_key = os.environ.get("GROQ_API_KEY", "")
+    if not env_key and hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
+        env_key = st.secrets["GROQ_API_KEY"]
 
-            if not api_key and hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
-                api_key = st.secrets["GROQ_API_KEY"]
-            
-            groq_client = Groq(api_key=api_key)
+    if "groq_api_key" not in st.session_state:
+        st.session_state.groq_api_key = env_key
+
+    def setup_voice_pipeline(key):
+        try:
+            groq_client = Groq(api_key=key) if key else None
             llm_coach = LLMCoach(groq_client)
             tts = TextToSpeech()
-            st.session_state.voice_pipeline = VoicePipeline(llm_coach, tts)
-        except Exception as e:
-            st.session_state.voice_pipeline = None
+            return VoicePipeline(llm_coach, tts)
+        except Exception:
+            return None
+
+    if "voice_pipeline" not in st.session_state or st.session_state.voice_pipeline is None:
+        st.session_state.voice_pipeline = setup_voice_pipeline(st.session_state.groq_api_key)
 
     workout_started = st.session_state.get("workout_started", False)
     
@@ -56,6 +64,24 @@ def main():
 
         if st.session_state.username:
             st.caption(f"👤 Login as {st.session_state.username}")
+
+        with st.expander("🔑 AI Coach Settings", expanded=not bool(st.session_state.groq_api_key)):
+            pasted_key = st.text_input(
+                "Groq API Key",
+                value=st.session_state.groq_api_key,
+                type="password",
+                help="Paste your Groq API key here (get one free at console.groq.com)",
+                placeholder="gsk_..."
+            )
+            if pasted_key != st.session_state.groq_api_key:
+                st.session_state.groq_api_key = pasted_key
+                st.session_state.voice_pipeline = setup_voice_pipeline(pasted_key)
+                st.rerun()
+
+            if st.session_state.groq_api_key:
+                st.caption("🟢 Voice Coach: Connected")
+            else:
+                st.caption("🟡 Paste Groq key above for live voice coaching")
 
         st.divider()
 
@@ -106,11 +132,29 @@ def main():
             if end_session_button:
                 st.session_state.workout_started = False
                 
+                sets_completed = st.session_state.get("sets_completed", 0)
+                target_sets = st.session_state.get("target_sets", 0)
+                total_reps = st.session_state.get("reps", 0)
+                is_completed = (target_sets > 0 and sets_completed >= target_sets)
+
                 if st.session_state.voice_pipeline:
+                    if is_completed:
+                        event = "workout_completed"
+                        metrics_payload = {}
+                    else:
+                        event = "workout_ended_early"
+                        metrics_payload = {
+                            "issue": (
+                                f"The user ended the workout early! Completed only {sets_completed} of {target_sets} sets "
+                                f"({total_reps} total reps). Tell them clearly that they did not finish the full workout, "
+                                f"and push them to complete all planned sets next time."
+                            )
+                        }
+
                     result = st.session_state.voice_pipeline.process_event(
-                        event="workout_completed",
+                        event=event,
                         exercise=exercise,
-                        metrics={}
+                        metrics=metrics_payload
                     )
                     if result:
                         st.session_state.audio_to_play, st.session_state.coach_feedback = result

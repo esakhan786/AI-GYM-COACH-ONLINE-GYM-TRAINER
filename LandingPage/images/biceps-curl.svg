@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#281c20"/><stop offset="1" stop-color="#111318"/></linearGradient><radialGradient id="glow"><stop stop-color="#ef7196" stop-opacity=".28"/><stop offset="1" stop-color="#ef7196" stop-opacity="0"/></radialGradient></defs>
+  <rect width="800" height="500" fill="url(#bg)"/><circle cx="410" cy="246" r="250" fill="url(#glow)"/>
+  <path d="M80 90h640M80 410h640M145 90v320m510-320v320" stroke="#ffffff" stroke-opacity=".08"/><path d="M125 356h550" stroke="#ef7196" stroke-opacity=".45" stroke-width="3"/>
+  <circle cx="403" cy="123" r="28" fill="#f2c49b"/>
+  <path d="m400 160-30 113-18 85m18-85-87-21-35 51m122-30 88-27 34-87m-122 114-47 102m47-102 65 102" fill="none" stroke="#f3eee6" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m443 217 36-72m-43 81 54 27m-63-37 63-17" stroke="#ef7196" stroke-width="12" stroke-linecap="round"/>
+  <path d="M460 275a65 65 0 0 0 48-52" fill="none" stroke="#ef7196" stroke-width="3" stroke-dasharray="6 7"/>
+  <text x="56" y="462" fill="#ef7196" font-family="Arial,sans-serif" font-size="19" letter-spacing="4">FORM / CURL</text><text x="665" y="462" fill="#fff" fill-opacity=".45" font-family="Arial,sans-serif" font-size="15">05</text>
+</svg>
