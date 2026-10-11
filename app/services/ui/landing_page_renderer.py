@@ -164,29 +164,45 @@ def get_compiled_landing_page() -> str:
 
 
 def render_landing_page():
-    # Style to make the landing page stretch 100% full-screen without Streamlit chrome
+    # Style to make the landing page 100% full-screen fixed viewport, exactly like localhost:8080
     st.markdown(
         """
         <style>
-        header[data-testid="stHeader"] {
+        /* Hide all Streamlit UI elements */
+        #MainMenu, header, footer, [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"], [data-testid="stBottom"] {
             display: none !important;
+            height: 0 !important;
+            width: 0 !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
         }
-        footer {
-            display: none !important;
+        html, body, [data-testid="stApp"], .main, .block-container, [data-testid="stMainBlockContainer"], [data-testid="stAppViewBlockContainer"] {
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100vw !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+            background: #0a0a0a !important;
         }
-        [data-testid="stToolbar"] {
-            display: none !important;
-        }
-        .main .block-container {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            max-width: 100% !important;
-        }
-        iframe {
+        /* Lock the iframe to the browser viewport so fixed navbar and overlays work identically to localhost:8080 */
+        div[data-testid="stCustomComponentV1"], div[data-testid="stCustomComponentV1"] > iframe, iframe {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
             border: none !important;
-            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            z-index: 999999 !important;
+            display: block !important;
+            background: #0a0a0a !important;
         }
         </style>
         """,
@@ -194,5 +210,5 @@ def render_landing_page():
     )
 
     compiled_html = get_compiled_landing_page()
-    components.html(compiled_html, height=3100, scrolling=False)
+    components.html(compiled_html, height=1200, scrolling=True)
 
