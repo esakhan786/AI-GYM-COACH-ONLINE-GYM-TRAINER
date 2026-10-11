@@ -82,10 +82,9 @@ ai-gym-coach/
 │   │   └── preview-workout.png      # Screenshot: Session completion & voice coach log
 │   └── fonts/                       # Averta web fonts
 │
-├── Main App/                        # Streamlit web application
+├── app/                             # Streamlit web application
 │   ├── main.py                      # Main application entry point & UI layout
 │   ├── requirements.txt             # Python dependencies
-│   ├── packages.txt                 # Linux system packages (libgl1, etc.)
 │   │
 │   ├── core/                        # Base exercise abstract classes
 │   │   └── base_exercise.py
@@ -112,6 +111,7 @@ ai-gym-coach/
 │   │
 │   └── static/                      # Custom fonts & app styles
 │
+├── requirements.txt                 # Root Python dependencies for cloud deployment
 ├── .gitignore                       # Git ignore rules (protects secrets & DB)
 └── README.md                        # Project documentation
 ```
@@ -142,15 +142,15 @@ python -m venv .venv
 source .venv/bin/activate
 
 # Install dependencies
-pip install -r "Main App/requirements.txt"
+pip install -r requirements.txt
 ```
 
 ### 3. Configure Your Groq API Key
 
-Create a `.streamlit/secrets.toml` file inside `Main App/`:
+Create a `.streamlit/secrets.toml` file inside `app/` (or repository root):
 
 ```toml
-# Main App/.streamlit/secrets.toml
+# app/.streamlit/secrets.toml
 GROQ_API_KEY = "gsk_your_groq_api_key_here"
 ```
 
@@ -159,7 +159,7 @@ GROQ_API_KEY = "gsk_your_groq_api_key_here"
 ### 4. Run the Main Application
 
 ```bash
-streamlit run "Main App/main.py"
+streamlit run app/main.py
 ```
 
 Open your browser at **[http://localhost:8501](http://localhost:8501)**.
@@ -180,12 +180,13 @@ Open your browser at **[http://localhost:8080](http://localhost:8080)**.
 
 1. Push your repository to GitHub.
 2. Go to [share.streamlit.io](https://share.streamlit.io) and create a new app.
-3. Set **Main file path** to: `Main App/main.py`.
-4. Under **Advanced settings** -> **Secrets**, add your Groq API key:
+3. Set **Main file path** to: `app/main.py`.
+4. Under **Advanced settings** -> **Python version**, select **3.11**.
+5. Under **Secrets**, add your Groq API key:
    ```toml
    GROQ_API_KEY = "gsk_your_groq_api_key_here"
    ```
-5. Deploy! Streamlit will automatically read `Main App/packages.txt` to install OpenCV system dependencies.
+6. Deploy! Streamlit will automatically read `requirements.txt` and build the application cleanly.
 
 ---
 
