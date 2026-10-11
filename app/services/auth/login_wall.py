@@ -121,7 +121,17 @@ def render_login_wall():
             label_visibility="collapsed",
             placeholder="Enter unique athlete name (e.g. esakhan)",
         )
-        submit_button = st.form_submit_button("🚀 Start Workout Session", width="stretch")
+        col_btn1, col_btn2 = st.columns(2)
+        with col_btn1:
+            submit_button = st.form_submit_button("🚀 Start Workout Session", width="stretch")
+        with col_btn2:
+            guest_button = st.form_submit_button("⚡ Quick Demo (1-Click)", width="stretch")
+
+    if guest_button:
+        user = get_or_create_user("esakhan")
+        st.session_state["user_id"] = user["id"]
+        st.session_state["username"] = user["username"]
+        st.rerun()
 
     if submit_button:
         cleaned_username = username.strip() if username else ""

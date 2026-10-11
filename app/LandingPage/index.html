@@ -60,7 +60,7 @@
 
       <div class="hero-cta-row">
         <a
-          href="https://ai-gym-coach-online-gym-trainer-jtumd68f7rbz8pxbp8ybog.streamlit.app/"
+          href="https://ai-realtime-gym-coach.streamlit.app/"
           target="_blank"
           rel="noopener noreferrer"
           class="btn-primary"
@@ -465,10 +465,13 @@
 
     <script>
       function getStreamlitUrl() {
-        var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        return isLocal
-          ? 'http://localhost:8501/?embed=true'
-          : 'https://ai-gym-coach-online-gym-trainer-jtumd68f7rbz8pxbp8ybog.streamlit.app/?embed=true';
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          return 'http://localhost:8501/?embed=true';
+        }
+        if (window.location.hostname.indexOf('streamlit.app') !== -1) {
+          return window.location.origin + '/?embed=true';
+        }
+        return 'https://ai-realtime-gym-coach.streamlit.app/?embed=true';
       }
 
       function openDemoModal(e) {
