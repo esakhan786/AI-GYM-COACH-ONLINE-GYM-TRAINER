@@ -65,8 +65,12 @@ def main():
     initial_session_defaults()
 
     env_key = os.environ.get("GROQ_API_KEY", "")
-    if not env_key and hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
-        env_key = st.secrets["GROQ_API_KEY"]
+    if not env_key:
+        try:
+            if hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
+                env_key = st.secrets["GROQ_API_KEY"]
+        except Exception:
+            pass
 
     if "groq_api_key" not in st.session_state:
         st.session_state.groq_api_key = env_key
