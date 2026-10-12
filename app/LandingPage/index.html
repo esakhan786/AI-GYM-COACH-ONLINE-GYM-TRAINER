@@ -37,7 +37,7 @@
         <a href="#visuals">Gallery</a>
         <a href="https://www.linkedin.com/in/esa-khan-1b4941385/" target="_blank" rel="noopener noreferrer" style="color: var(--amber); font-weight: 700;">LinkedIn ↗</a>
         <a href="#contact">Contact</a>
-        <a href="http://localhost:8501/?start=true" target="_top" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px; cursor: pointer;" onclick="return handleTryLive(event)">⚡ Try Live</a>
+        <a href="http://localhost:8501/?start=true" target="_top" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px; cursor: pointer; position: relative; z-index: 1000;">⚡ Try Live</a>
       </div>
     </nav>
 
@@ -59,14 +59,13 @@
         fix.
       </p>
 
-      <div class="hero-cta-row">
+      <div class="hero-cta-row" style="position: relative; z-index: 1000;">
         <a
           href="http://localhost:8501/?start=true"
           target="_top"
           class="btn-primary"
           id="cta-button"
-          style="cursor: pointer;"
-          onclick="return handleTryLive(event)"
+          style="cursor: pointer; position: relative; z-index: 1000;"
         >
           <span>Try it live</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -459,56 +458,22 @@
         return 'http://localhost:8501/?start=true';
       }
 
-      function handleTryLive(e) {
+      function ensureButtonsHaveTarget() {
         var targetUrl = getWorkoutAppUrl();
-        console.log('Transitioning to Workout Login:', targetUrl);
-
-        if (e && e.currentTarget) {
-          e.currentTarget.href = targetUrl;
-          e.currentTarget.target = '_top';
-        }
-
-        try {
-          if (window.top && window.top.location) {
-            window.top.location.href = targetUrl;
-            if (e && e.preventDefault) e.preventDefault();
-            return false;
-          }
-        } catch (err) {}
-
-        try {
-          if (window.parent && window.parent.location) {
-            window.parent.location.href = targetUrl;
-            if (e && e.preventDefault) e.preventDefault();
-            return false;
-          }
-        } catch (err) {}
-
-        return true;
-      }
-
-      function syncAllTryLiveButtons() {
-        var targetUrl = getWorkoutAppUrl();
-        var buttons = document.querySelectorAll('a.btn-primary, a#cta-button, a[onclick*="handleTryLive"]');
+        var buttons = document.querySelectorAll('a.btn-primary, a#cta-button');
         buttons.forEach(function(btn) {
           var txt = (btn.textContent || '').toLowerCase();
           if (txt.indexOf('try live') !== -1 || txt.indexOf('try it live') !== -1 || btn.id === 'cta-button') {
             btn.href = targetUrl;
             btn.target = '_top';
-            btn.setAttribute('onclick', 'return handleTryLive(event);');
-            btn.addEventListener('pointerdown', function() {
-              btn.href = getWorkoutAppUrl();
-            });
-            btn.addEventListener('mouseenter', function() {
-              btn.href = getWorkoutAppUrl();
-            });
+            btn.removeAttribute('onclick');
           }
         });
       }
 
-      document.addEventListener('DOMContentLoaded', syncAllTryLiveButtons);
-      window.addEventListener('load', syncAllTryLiveButtons);
-      syncAllTryLiveButtons();
+      document.addEventListener('DOMContentLoaded', ensureButtonsHaveTarget);
+      window.addEventListener('load', ensureButtonsHaveTarget);
+      ensureButtonsHaveTarget();
     </script>
   </body>
 </html>

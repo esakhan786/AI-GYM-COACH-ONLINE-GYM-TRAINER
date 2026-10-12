@@ -192,7 +192,7 @@ img { display: block; width: 100%; height: 100%; object-fit: contain; }
   animation: fade-up 0.8s 0.3s ease both;
 }
 
-.btn-primary {
+.btn-primary, #cta-button {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -207,13 +207,17 @@ img { display: block; width: 100%; height: 100%; object-fit: contain; }
   border-radius: var(--radius);
   transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   box-shadow: 0 0 0 0 var(--amber-glow);
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 1000 !important;
 }
-.btn-primary:hover {
+.btn-primary:hover, #cta-button:hover {
   background: #ffc04d;
   transform: translateY(-2px);
   box-shadow: 0 8px 40px var(--amber-glow);
 }
-.btn-primary:active { transform: translateY(0); }
+.btn-primary:active, #cta-button:active { transform: translateY(0); }
 
 .btn-ghost {
   font-family: var(--font-body);
