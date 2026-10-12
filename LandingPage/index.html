@@ -37,7 +37,7 @@
         <a href="#visuals">Gallery</a>
         <a href="https://www.linkedin.com/in/esa-khan-1b4941385/" target="_blank" rel="noopener noreferrer" style="color: var(--amber); font-weight: 700;">LinkedIn ↗</a>
         <a href="#contact">Contact</a>
-        <a href="#live-demo-modal" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px; cursor: pointer;" onclick="handleTryLive(event)">⚡ Try Live</a>
+        <a href="?start=true" target="_top" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px; cursor: pointer;" onclick="return handleTryLive(event)">⚡ Try Live</a>
       </div>
     </nav>
 
@@ -61,11 +61,12 @@
 
       <div class="hero-cta-row">
         <a
-          href="#live-demo-modal"
+          href="?start=true"
+          target="_top"
           class="btn-primary"
           id="cta-button"
           style="cursor: pointer;"
-          onclick="handleTryLive(event)"
+          onclick="return handleTryLive(event)"
         >
           <span>Try it live</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -443,80 +444,95 @@
       </footer>
     </section>
 
-    <!-- LIVE DEMO EMBEDDED MODAL -->
-    <div id="live-demo-modal" class="demo-modal" style="display: none;">
-      <div class="demo-modal-backdrop" onclick="closeDemoModal()"></div>
-      <div class="demo-modal-content">
-        <div class="demo-modal-header">
-          <div class="demo-header-title">
-            <span class="live-dot"></span>
-            <span>APNA AI GYM COACH · LIVE INTERACTIVE ARENA</span>
-          </div>
-          <div class="demo-header-actions">
-            <a id="open-new-tab-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn-modal-action">⛶ Open New Tab</a>
-            <button onclick="closeDemoModal()" class="btn-modal-close" aria-label="Close modal">✕</button>
-          </div>
-        </div>
-        <div class="demo-modal-body">
-          <iframe id="streamlit-frame" src="" allow="camera *; microphone *; display-capture *" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-
     <script>
-     
-function getStreamlitUrl() {
-  return 'https://ai-gym-coach-online-gym-trainer-jtumd68f7rbz8pxbp8ybog.streamlit.app/?start=true&embed=true';
-}
+      function getWorkoutAppUrl() {
+        var topUrl = '';
+        try {
+          if (window.top && window.top.location && window.top.location.href) {
+            topUrl = window.top.location.href;
+          }
+        } catch (e) {}
 
+        if (!topUrl && document.referrer) {
+          topUrl = document.referrer;
+        }
+
+        if (!topUrl && window.location && window.location.href && window.location.href.indexOf('http') === 0) {
+          topUrl = window.location.href;
+        }
+
+        var deployedApp = 'https://ai-gym-coach-online-gym-trainer-jtumd68f7rbz8pxbp8ybog.streamlit.app/';
+
+        if (topUrl) {
+          if (topUrl.indexOf('localhost') !== -1 || topUrl.indexOf('127.0.0.1') !== -1) {
+            var matchLocal = topUrl.match(/^(https?:\/\/[^\/]+:\d+)/);
+            if (matchLocal) {
+              return matchLocal[1] + '/?start=true';
+            }
+            return topUrl.split('?')[0].split('#')[0] + '?start=true';
+          }
+          if (topUrl.indexOf('streamlit.app') !== -1) {
+            var matchCloud = topUrl.match(/^(https:\/\/[^\/]+\.streamlit\.app)/);
+            if (matchCloud) {
+              return matchCloud[1] + '/?start=true';
+            }
+            return topUrl.split('?')[0].split('#')[0] + '?start=true';
+          }
+        }
+
+        return deployedApp + '?start=true';
+      }
 
       function handleTryLive(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        openDemoModal(e);
+        var targetUrl = getWorkoutAppUrl();
+        console.log('Transitioning to Workout Login:', targetUrl);
+
+        if (e && e.currentTarget) {
+          e.currentTarget.href = targetUrl;
+          e.currentTarget.target = '_top';
+        }
+
+        try {
+          if (window.top && window.top.location) {
+            window.top.location.href = targetUrl;
+            if (e && e.preventDefault) e.preventDefault();
+            return false;
+          }
+        } catch (err) {}
+
+        try {
+          if (window.parent && window.parent.location) {
+            window.parent.location.href = targetUrl;
+            if (e && e.preventDefault) e.preventDefault();
+            return false;
+          }
+        } catch (err) {}
+
+        return true;
       }
 
-      
-function openDemoModal(e) {
-  if (e && e.preventDefault) e.preventDefault();
-
-  var modal = document.getElementById('live-demo-modal');
-  var iframe = document.getElementById('streamlit-frame');
-  var newTabBtn = document.getElementById('open-new-tab-btn');
-
-  var url = getStreamlitUrl();
-
-  console.log('Streamlit iframe URL:', url);
-
-  if (iframe) {
-    iframe.src = url;
-  }
-
-  if (newTabBtn) {
-    newTabBtn.href = url.replace('&embed=true', '');
-  }
-
-  if (modal) {
-    modal.style.display = 'flex';
-  }
-
-  document.body.style.overflow = 'hidden';
-}
-
-      function closeDemoModal() {
-        var modal = document.getElementById('live-demo-modal');
-        var iframe = document.getElementById('streamlit-frame');
-        if (modal) {
-          modal.style.display = 'none';
-        }
-        if (iframe) {
-          iframe.src = '';
-        }
-        document.body.style.overflow = 'auto';
+      function syncAllTryLiveButtons() {
+        var targetUrl = getWorkoutAppUrl();
+        var buttons = document.querySelectorAll('a.btn-primary, a#cta-button, a[onclick*="handleTryLive"]');
+        buttons.forEach(function(btn) {
+          var txt = (btn.textContent || '').toLowerCase();
+          if (txt.indexOf('try live') !== -1 || txt.indexOf('try it live') !== -1 || btn.id === 'cta-button') {
+            btn.href = targetUrl;
+            btn.target = '_top';
+            btn.setAttribute('onclick', 'return handleTryLive(event);');
+            btn.addEventListener('pointerdown', function() {
+              btn.href = getWorkoutAppUrl();
+            });
+            btn.addEventListener('mouseenter', function() {
+              btn.href = getWorkoutAppUrl();
+            });
+          }
+        });
       }
 
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeDemoModal();
-      });
+      document.addEventListener('DOMContentLoaded', syncAllTryLiveButtons);
+      window.addEventListener('load', syncAllTryLiveButtons);
+      syncAllTryLiveButtons();
     </script>
   </body>
 </html>

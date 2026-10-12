@@ -37,6 +37,11 @@ def main():
     entered_app = st.session_state.get("entered_app", False)
 
     if not entered_app:
+        with st.sidebar:
+            if st.button("⚡ Start Workout Session (Login)", key="enter_app_sidebar_btn", use_container_width=True):
+                st.session_state["entered_app"] = True
+                st.query_params["start"] = "true"
+                st.rerun()
         render_landing_page()
         return
 
