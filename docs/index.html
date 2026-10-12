@@ -37,7 +37,7 @@
         <a href="#visuals">Gallery</a>
         <a href="https://www.linkedin.com/in/esa-khan-1b4941385/" target="_blank" rel="noopener noreferrer" style="color: var(--amber); font-weight: 700;">LinkedIn ↗</a>
         <a href="#contact">Contact</a>
-        <a href="?start=true" target="_top" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px; cursor: pointer;" onclick="return handleTryLive(event)">⚡ Try Live</a>
+        <a href="http://localhost:8501/?start=true" target="_top" class="btn-primary" style="padding: 7px 16px; font-size: 13px; text-decoration: none; border-radius: 6px; cursor: pointer;" onclick="return handleTryLive(event)">⚡ Try Live</a>
       </div>
     </nav>
 
@@ -61,7 +61,7 @@
 
       <div class="hero-cta-row">
         <a
-          href="?start=true"
+          href="http://localhost:8501/?start=true"
           target="_top"
           class="btn-primary"
           id="cta-button"
@@ -446,41 +446,17 @@
 
     <script>
       function getWorkoutAppUrl() {
-        var topUrl = '';
         try {
-          if (window.top && window.top.location && window.top.location.href) {
-            topUrl = window.top.location.href;
-          }
-        } catch (e) {}
-
-        if (!topUrl && document.referrer) {
-          topUrl = document.referrer;
-        }
-
-        if (!topUrl && window.location && window.location.href && window.location.href.indexOf('http') === 0) {
-          topUrl = window.location.href;
-        }
-
-        var deployedApp = 'https://ai-gym-coach-online-gym-trainer-jtumd68f7rbz8pxbp8ybog.streamlit.app/';
-
-        if (topUrl) {
-          if (topUrl.indexOf('localhost') !== -1 || topUrl.indexOf('127.0.0.1') !== -1) {
-            var matchLocal = topUrl.match(/^(https?:\/\/[^\/]+:\d+)/);
-            if (matchLocal) {
-              return matchLocal[1] + '/?start=true';
-            }
-            return topUrl.split('?')[0].split('#')[0] + '?start=true';
-          }
-          if (topUrl.indexOf('streamlit.app') !== -1) {
-            var matchCloud = topUrl.match(/^(https:\/\/[^\/]+\.streamlit\.app)/);
+          var ref = (document.referrer || '') + ' ' + (window.location ? window.location.href : '');
+          if (ref.indexOf('streamlit.app') !== -1) {
+            var matchCloud = ref.match(/(https:\/\/[^\s\/]+\.streamlit\.app)/);
             if (matchCloud) {
               return matchCloud[1] + '/?start=true';
             }
-            return topUrl.split('?')[0].split('#')[0] + '?start=true';
           }
-        }
+        } catch (e) {}
 
-        return deployedApp + '?start=true';
+        return 'http://localhost:8501/?start=true';
       }
 
       function handleTryLive(e) {
