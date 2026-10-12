@@ -153,7 +153,6 @@ def render_landing_page():
             overflow: hidden !important;
             background: #0a0a0a !important;
         }
-        /* Lock the iframe to the browser viewport so fixed navbar and overlays work identically to localhost:8080 */
         div[data-testid="stCustomComponentV1"], div[data-testid="stCustomComponentV1"] > iframe, iframe {
             position: fixed !important;
             top: 0 !important;
@@ -171,10 +170,42 @@ def render_landing_page():
             display: block !important;
             background: #0a0a0a !important;
         }
+        /* Floating native Streamlit TRY IT LIVE button with top z-index */
+        div.st-key-st_native_try_live_btn, div:has(> button[data-testid*="st_native_try_live_btn"]) {
+            position: fixed !important;
+            top: 16px !important;
+            right: 32px !important;
+            z-index: 10000000 !important;
+            display: block !important;
+        }
+        div.st-key-st_native_try_live_btn button {
+            background: #f5a623 !important;
+            color: #000000 !important;
+            font-weight: 800 !important;
+            font-size: 13px !important;
+            letter-spacing: 0.12em !important;
+            text-transform: uppercase !important;
+            border: none !important;
+            padding: 10px 24px !important;
+            border-radius: 6px !important;
+            box-shadow: 0 4px 25px rgba(245, 166, 35, 0.6) !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+        }
+        div.st-key-st_native_try_live_btn button:hover {
+            background: #ffb84d !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 35px rgba(245, 166, 35, 0.9) !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
     )
+
+    if st.button("⚡ TRY IT LIVE (LOGIN)", key="st_native_try_live_btn", type="primary"):
+        st.session_state["entered_app"] = True
+        st.query_params["start"] = "true"
+        st.rerun()
 
     compiled_html = get_compiled_landing_page()
     components.html(compiled_html, height=1200, scrolling=True)
