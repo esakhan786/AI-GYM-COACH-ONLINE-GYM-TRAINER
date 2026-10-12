@@ -475,24 +475,32 @@ function getStreamlitUrl() {
         openDemoModal(e);
       }
 
-      function openDemoModal(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        var modal = document.getElementById('live-demo-modal');
-        var iframe = document.getElementById('streamlit-frame');
-        var newTabBtn = document.getElementById('open-new-tab-btn');
-        var url = getStreamlitUrl();
+      
+function openDemoModal(e) {
+  if (e && e.preventDefault) e.preventDefault();
 
-        if (iframe) {
-          iframe.src = url;
-        }
-        if (newTabBtn) {
-          newTabBtn.href = url.replace('&embed=true', '');
-        }
-        if (modal) {
-          modal.style.display = 'flex';
-        }
-        document.body.style.overflow = 'hidden';
-      }
+  var modal = document.getElementById('live-demo-modal');
+  var iframe = document.getElementById('streamlit-frame');
+  var newTabBtn = document.getElementById('open-new-tab-btn');
+
+  var url = getStreamlitUrl();
+
+  console.log('Streamlit iframe URL:', url);
+
+  if (iframe) {
+    iframe.src = url;
+  }
+
+  if (newTabBtn) {
+    newTabBtn.href = url.replace('&embed=true', '');
+  }
+
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+
+  document.body.style.overflow = 'hidden';
+}
 
       function closeDemoModal() {
         var modal = document.getElementById('live-demo-modal');
